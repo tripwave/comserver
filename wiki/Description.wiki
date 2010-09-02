@@ -1,7 +1,7 @@
 #summary Why I decided to try dynamic FLV streams.
 #labels Featured,Phase-Implementation
 
-= ComServer =
+=ComServer=
 
 The purpose to use the FLV as the main container rather than remote shared object or other technologies is that it is readily transmitted between rtmp stream servers.
 The FLV format is well documented, and supports embedded script cue points,

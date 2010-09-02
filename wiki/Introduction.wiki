@@ -1,5 +1,5 @@
 #summary Describing the Glorified Cue Points framework
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 
 = Framework Introduction =
 

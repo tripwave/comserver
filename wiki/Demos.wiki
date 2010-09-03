@@ -8,3 +8,5 @@ Demo one server code will load all the flv files in the top level of the streams
 The client shows how to create a resource, a proxy , and attach the underlying netstream to a video object.
 
 In version 1.0, Audio / Video mixed in with user script-data is not optimized. To integrate A/V streams, the epoch of the output and input media must be closely monitored, or the a/v may stutter. This demo gives you a starting point.
+===Demo 2 ===
+Demo two client code shows how to send messages and configure the flv buffer. The server code shows how to use the room ticker feed which broadcasts node data, and also how to configure metadata for the resource streams. The room ticker code is inside the framework source.

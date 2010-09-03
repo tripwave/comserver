@@ -1,0 +1,10 @@
+#summary API demo description.
+#labels Featured,Phase-Implementation
+
+= Version 1.0 =
+===Demo 1 ===
+Demo one server code will load all the flv files in the top level of the streams directory and use them to create a global feed for all live flv streams you target with the client.
+
+The client shows how to create a resource, a proxy , and attach the underlying netstream to a video object.
+
+In version 1.0, Audio / Video mixed in with user script-data is not optimized. To integrate A/V streams, the epoch of the output and input media must be closely monitored, or the a/v may stutter. This demo gives you a starting point.

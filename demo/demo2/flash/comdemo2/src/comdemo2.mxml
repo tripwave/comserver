@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   minWidth="955" minHeight="600"
+			   implements="com.thebitstream.comserver.stream.IClient"
+			   applicationComplete="boot()" width="599" height="350">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.thebitstream.comserver.stream.*;
+			import com.thebitstream.comserver.stream.IClient;
+
+			private var userId:String;
+			
+			private var comServ:ResourceProxy;
+			private var resource:Resource;
+			
+			
+			private function boot():void{
+							
+				resource=new Resource("rtmp://localhost/comdemo","groupName:componentName");
+			}
+			
+			private function connectToServer():void{
+				userId=idName.text;
+				
+				ResourceProxy.BUFFER=.2;//seconds
+				comServ=new ResourceProxy(resource,this,userId, userData );
+			}
+			
+			private function sendChat():void{
+				comServ.doChat({color:"aaaaaa", text:idInput.text});
+				idInput.text="";
+			}
+			public function doChat(event:ComEvent):void{
+				trace("doChat "+ event.data[0].text);
+				idOutput.text= event.data.id+" : "+ event.data[0].text+'\n'+idOutput.text ;
+				idOutput.validateNow();
+			}
+			
+			public function onTick(event:ComEvent):void{
+				trace("onTick ");
+			}
+			
+			
+			private function get userData():Object{
+				var ret:Object={
+						
+				};		
+				return ret;		
+			}
+			
+			public function onComResult(obj:RPCReturn):void
+			{
+			}
+			public function onMetaData(obj:ComEvent):void
+			{
+			}
+			public function onNetStatus(code:String):void
+			{
+			}			
+		]]>
+	</fx:Script>
+	<s:TextInput x="27" y="13" id="idName" text="name"/>
+	<s:Button x="274" y="14" label="Connect" click="connectToServer()"/>
+	<s:TextInput x="35" y="116" width="469" id="idInput"/>
+	<s:TextArea x="35" y="146" width="469" height="165" id="idOutput"/>
+	<s:Button x="519" y="117" label="Send" click="sendChat()"/>
+</s:Application>

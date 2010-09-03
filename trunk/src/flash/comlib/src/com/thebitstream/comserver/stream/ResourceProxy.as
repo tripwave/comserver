@@ -42,7 +42,7 @@ package com.thebitstream.comserver.stream
 		private var _currentMethod:QName;
 		private var _data:Object={x:0,y:0}
 		private var _setter:Boolean=false;
-		
+		public static var BUFFER:int=.5;
 
 		/**
 		 * Represents a presence on the Red5 server with an id and attributes made of name value pairs.
@@ -162,7 +162,7 @@ package com.thebitstream.comserver.stream
 			}
 			else if( nse.info.code === 'NetStream.Buffer.Empty' )
 			{
-				_ns.bufferTime=1;
+				_ns.bufferTime=BUFFER;
 			}
 			if( nse.info.code === 'NetConnection.Connect.Success' )
 			{
@@ -181,7 +181,7 @@ package com.thebitstream.comserver.stream
 				{
 					_ns=new NetStream(_nc);
 					_ns.client=this;
-					_ns.bufferTime=1;
+					_ns.bufferTime=BUFFER;
 					_ns.addEventListener(NetStatusEvent.NET_STATUS,onStat);
 					_ns.play(_resource.resourceName);					
 				}

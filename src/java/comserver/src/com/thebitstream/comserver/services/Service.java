@@ -26,6 +26,7 @@ import java.util.Map;
 import org.red5.server.api.Red5;
 
 
+import com.thebitstream.comserver.app.INodeDataFactory;
 import com.thebitstream.comserver.nodes.IComserverNode;
 import com.thebitstream.comserver.stream.IResourceSink;
 import com.thebitstream.comserver.stream.Resource;
@@ -36,13 +37,14 @@ import com.thebitstream.comserver.stream.Resource;
 public class Service implements IClientProxyAdapter {
 	
 	private IResourceSink _game;
-	
+	private INodeDataFactory _dataFactory;
 	public List<IPacketListener>processors;
 
 	private ServiceHandler handler;
 	
-	public Service(IResourceSink resource) {
+	public Service(IResourceSink resource,INodeDataFactory dataFactory) {
 		_game=resource;
+		_dataFactory=dataFactory;
 		processors=new ArrayList<IPacketListener>();
 		handler=new ServiceHandler(this);
 		
@@ -100,7 +102,7 @@ public class ServiceHandler implements IServiceHandler{
 		}
 		
 		
-		Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, data);			
+		Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, owner._dataFactory.createData(data.get("id").toString(), data));			
 		
 		_game.sendEvent(method,object);
 		
@@ -116,7 +118,7 @@ public class ServiceHandler implements IServiceHandler{
 				return 0;
 		}
 		
-		Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, data);					
+		Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, owner._dataFactory.createData(data.get("id").toString(), data));							
 		
 		return 1;
 	}	

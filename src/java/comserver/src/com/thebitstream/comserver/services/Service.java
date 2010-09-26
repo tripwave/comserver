@@ -107,7 +107,7 @@ public class ServiceHandler implements IServiceHandler{
 		return 1;
 	}
 	
-	public int setData(String method ,Map<Object,Object> object,Map<Object,Object> data)
+	public int setData(Map<Object,Object> data)
 	{
 		data.put("id",Red5.getConnectionLocal().getAttribute(Resource.PROP_ID));		
 		

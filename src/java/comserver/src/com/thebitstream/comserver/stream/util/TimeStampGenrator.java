@@ -36,9 +36,10 @@ public class TimeStampGenrator {
 		long now= System.currentTimeMillis();
 		return (int) ( now- Long.valueOf(times.get(caller).toString()));
 	}
-	public static void startTimer(Object caller){
+	public static long startTimer(Object caller){
 		long now=System.currentTimeMillis();
 		times.put(caller, now);
+		return now;
 	}
 	public static void stopTimer(Object caller){
 		times.remove(caller);

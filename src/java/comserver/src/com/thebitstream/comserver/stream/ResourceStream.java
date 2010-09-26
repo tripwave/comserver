@@ -173,12 +173,8 @@ public class ResourceStream implements IResourceStream {
 	@Override
 	public void start() {
 		log.debug("start");
-		TimeStampGenrator.startTimer(this);
+		creationTime=TimeStampGenrator.startTimer(this);
 		bytesReceived = 0;
-		
-		creationTime = System.currentTimeMillis();
-	
-
 	}
 
 	@Override

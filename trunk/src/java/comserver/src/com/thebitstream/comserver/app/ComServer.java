@@ -370,7 +370,7 @@ public abstract class ComServer extends MultiThreadedApplicationAdapter implemen
 	@Override
 	public IClientProxyAdapter  createAdapter(IResourceSink resource) {
 	
-		Service adapter= new Service(resource);
+		Service adapter= new Service(resource,dataFactory);
 		
 	
 		

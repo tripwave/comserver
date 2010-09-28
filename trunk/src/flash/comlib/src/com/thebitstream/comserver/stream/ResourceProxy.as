@@ -40,9 +40,10 @@ package com.thebitstream.comserver.stream
 		private var _resource:Resource;
 		private var _closed:Boolean=false;
 		private var _currentMethod:QName;
+		private var _clientId:*;
 		private var _data:Object={x:0,y:0}
 		private var _setter:Boolean=false;
-		public static var BUFFER:int=.5;
+		public static var BUFFER:Number=.5;
 
 		/**
 		 * Represents a presence on the Red5 server with an id and attributes made of name value pairs.
@@ -55,6 +56,8 @@ package com.thebitstream.comserver.stream
 		 */		
 		public function ResourceProxy(resource:Resource,handler:IClient,clientId:*,clientData:Object )
 		{
+			_clientId=clientId;
+			_data=clientData;
 			_resource=resource;
 			_client=handler;
 			super();
@@ -224,7 +227,9 @@ package com.thebitstream.comserver.stream
 		{
 			return _ns;
 		}		
-
+		public function get clientId():*{
+			return _clientId;
+		}
 		/**
 		 * If true, shared data will be updated during next out going call. 
 		 * @return 

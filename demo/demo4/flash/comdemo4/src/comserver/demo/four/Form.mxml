@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="220" height="180">
+	<fx:Script>
+		<![CDATA[
+			public override function get document():Object{
+				var doc:Object= super.document;
+				if(!doc){
+					doc={};
+				}
+				doc.user=idName.text;
+				doc.host=idHost.text;
+				doc.room=idRoom.text;
+				doc.group=idGroup.text;
+				return doc;
+			}
+		]]>
+	</fx:Script>
+	<s:TextInput x="10" y="27" id="idName" width="77" text="user-1"/>
+	<s:TextInput x="10" y="84" id="idHost" width="200" text="rtmp://localhost/comdemo"/>
+	<s:TextInput x="10" y="114" id="idRoom" width="100" text="room"/>
+	<s:TextInput x="10" y="144" id="idGroup" width="100" text="group"/>
+	<s:Label x="10" y="64" text="Server"/>
+	<s:Label x="11" y="10" text="Name"/>
+	<s:Button x="142" y="24" label="Connect" id="idConnect"/>
+</s:Group>

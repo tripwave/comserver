@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			  	xmlns:s="library://ns.adobe.com/flex/spark" 
+			   	xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+				xmlns:four="comserver.demo.four.*"
+				applicationComplete="boot()"
+				implements="com.thebitstream.comserver.stream.IClient" height="582" width="711">
+	<fx:Script>
+		<![CDATA[
+			import com.thebitstream.comserver.stream.IClient;
+		]]>
+	</fx:Script>
+<fx:Script source="Main.as"/>
+	<four:Container x="333" y="24" id="idContainerOut">
+	</four:Container>
+	<four:Container x="339" y="308" id="idContainerIn">
+	</four:Container>
+	<four:Form x="10" y="10" id="idForm">
+	</four:Form>
+	<s:Label x="490" y="285" id="idChan" height="20"/>
+	<s:Button x="256" y="343" label="Random" click="setRandom()"/>
+	<s:Button x="256" y="314" label="Me" click="setMe()"/>
+
+</s:Application>

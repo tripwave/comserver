@@ -2,6 +2,9 @@
 #labels Featured,Phase-Implementation
 
 = Version 1.0 =
+
+Note: The java jar is not included in the demo folders.
+
 ===Demo 1 ===
 Demo one server code will load all the flv files in the top level of the streams directory and use them to create a global feed for all live flv streams you target with the client.
 
@@ -12,3 +15,6 @@ In version 1.0, Audio / Video mixed in with user script-data is not optimized. T
 Demo two client code shows how to send messages and configure the flv buffer. The server code shows how to use the room ticker feed which broadcasts node data, and also how to configure metadata for the resource streams. The room ticker code is inside the framework source.
 ===Demo 3 ===
 Demo 3 includes only flash code and can run on the demo 2 server code. It shows how you might add shared objects to the mix.
+===Demo 4 ===
+Pass the Mic! Video conference sample using shared objects to control which client live stream is viewed in a singular comserver Resource stream. The java demo shows a bit of the IConnectionNode usage. The flex demo passes a flex form-document as node data.
+Requires camera and microphone for broadcast, or requires you to disable device access to view stream without.

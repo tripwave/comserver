@@ -19,11 +19,10 @@ Demo 3 includes only flash code and can run on the demo 2 server code. It shows 
 Pass the Mic! Video conference sample using shared objects to control which client live stream is viewed in a singular comserver Resource stream. The java demo shows a bit of the IConnectionNode usage. The flex demo passes a flex form-document as node data.
 Requires camera and microphone for broadcast, or requires you to disable device access to view stream without.
 ===Demo 5 ===
-Uses a Jinngine physics based stream feed, with away3dlite flash rendering to create a shared physics simulation. The data is delivered to the clients through the comserver flv stream in real time. The view of the simulation is synchronized between clients and based of their flv stream buffer length.
+Uses a Jinngine physics based stream feed, with away3dlite flash rendering to create a shared physics simulation. The data is delivered to the clients through the comserver flv stream in real time. The view of the simulation is synchronized between clients and based of their flv stream buffer length. The server-demo does not use a global feed, so every unique stream name in every room you create at run-time will be it's own simulation. Only a stream's own subscribers will be sharing that particular stream's physics simulation. When a client closes the browser, the node data shape is also removed. When new clients join, their shape is added to the stream sim. 
 
 I threw this together pretty fast, so there are some errors in Euler rotation angles between the Jinngine data models and away3d view. 
 
 Jinngine: [http://code.google.com/p/jinngine/ http://code.google.com/p/jinngine/]
 
 away3dlite: [http://away3d.com/ http://away3d.com/]
-

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			    implements="com.thebitstream.comserver.stream.IClient"
+				 width="716" height="600" backgroundColor="#C3BABA" preloaderChromeColor="#F8F5F5">
+	<fx:Style source="comdemo5.css"/>
+	<fx:Script>
+		<![CDATA[
+			import away3dlite.containers.Scene3D;
+			import away3dlite.containers.View3D;
+			import away3dlite.materials.WireColorMaterial;
+			import away3dlite.primitives.Cube6;
+			import away3dlite.primitives.Sphere;
+			
+			import com.thebitstream.comserver.stream.*;
+			import com.thebitstream.comserver.stream.IClient;
+
+
+			public var comServ:ResourceProxy;
+			public var resource:Resource;
+			
+			private var s3d:Scene3D;
+			private var objects:Object={};
+			private var view:View3D;
+			
+			private var sprite:Sprite;
+			private var handle:String;
+			
+		
+			private function boot():void{
+				
+				button.enabled=false;
+				button.visible=false;
+				
+				ResourceProxy.BUFFER=0.05;
+								
+				resource=new Resource("rtmp://localhost/comdemo","room:group");
+				
+				var id:int=int(Math.round((Math.random() * 999999+100000)))
+				var data:Object;		
+
+				if(idRadBox.selected){
+				
+					data={geometry:"box",
+					x:-6*Math.random(),y:-24*Math.random()+20,z:-25.1,
+					sX:6.0,sY:6.0,sZ:6.0};
+				
+					handle="box"+id.toString();
+				}else{
+					
+					data={geometry:"sphere",
+					x:-6*Math.random(),y:-24*Math.random()+20,z:-25.1,
+					radius:3.0};
+				
+				 	handle="sphere"+id.toString();				
+				}
+				
+				away3dcreate();
+			
+				comServ=new ResourceProxy(resource,this,handle,data);	
+			}
+
+			
+			private function away3dcreate():void {
+				sprite=new Sprite();
+				s3d=new Scene3D();
+				view=new View3D(s3d);
+				view.camera.z=-30;
+				view.camera.y=-20;
+				view.camera.rotationX=-20;
+				sprite.addChild(view);
+				sprite.x=200;
+				sprite.y=200;
+				container.addChild(sprite);	
+			}			
+
+			public function jinngine( e :ComEvent ):void{
+				
+				var bodies:Array=e.data.bodies;	
+				
+				
+				for each(var bod :Object in objects){
+					if(bod)
+					bod.live=false;
+				}
+					
+					
+				for each(var obj:Object in bodies){
+		
+					
+					if(objects[obj.id]){
+						objects[obj.id].shape.visible=true;
+						objects[obj.id].live=true;
+						objects[obj.id].shape.rotationX=obj.rX*-1;
+						objects[obj.id].shape.rotationY=obj.rY *-1 ;
+						objects[obj.id].shape.rotationZ=obj.rZ *-1;
+						objects[obj.id].shape.x=obj.x ;
+						objects[obj.id].shape.y= -1 * obj.y ;
+						objects[obj.id].shape.z=obj.z ;
+					}else{
+								
+						if(String(obj.id).indexOf("box")> -1 ){
+							
+							var box:Cube6=new Cube6(new WireColorMaterial(),6,6,6);
+							box.name=obj.id;		
+							objects[obj.id]={live:true,shape:box};
+							objects[obj.id].shape.x=obj.x ;
+							objects[obj.id].shape.y= -1 * obj.y ;
+							objects[obj.id].shape.z=obj.z ;							
+						
+							view.scene.addChild(box);							
+						
+						}else if(String(obj.id).indexOf("sphere") > -1) {
+						
+							var sphere:Sphere=new Sphere(new WireColorMaterial(),3);
+							sphere.name=obj.id;
+							objects[obj.id]={live:true,shape:sphere};
+							objects[obj.id].shape.x= obj.x ;
+							objects[obj.id].shape.y= -1 * obj.y ;
+							objects[obj.id].shape.z=obj.z ;	
+							
+							view.scene.addChild(sphere);							
+						}
+					}
+				}
+				
+				for each(var bodCheck :Object in objects){
+					if(bodCheck &&  bodCheck.live == false){
+						view.scene.removeChild(bodCheck.shape);
+						objects[bodCheck.shape.name]=null;
+						delete objects[bodCheck.shape.name];
+					}
+				}
+				
+				view.render();
+			}
+
+			private function doBump():void{
+				if(comServ){
+					comServ.connetion.call('jinngine'+ resource.resourceName+'.bumpMe',new Responder(null),{x:0,y:12,z:0});
+				}
+			}
+			
+			public function onComResult(obj:RPCReturn):void{
+				
+			}
+			public function onMetaData(obj:ComEvent):void{
+				
+			}
+			public function onNetStatus(code:String):void{
+				
+			}			
+		]]>
+	</fx:Script>
+	<mx:UIComponent id="container" width="696" height="580" x="10" y="10"/>
+	<s:Button x="247" y="5" id="button" label="Go!" click="boot()"/>
+	<s:RadioButton x="425" y="10"  selected="true" label="Sphere"/>
+	<s:RadioButton x="425" y="36" label="Box" id="idRadBox" width="61" visible="false"/>
+	<s:Button x="325" y="5" label="Bump" click="doBump()"/>	
+</s:Application>

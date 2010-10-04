@@ -45,7 +45,7 @@ public class FLVFeed extends Thread implements IResourceFeed {
 	}
 
 	@Override
-	public void execute() {
+	public void execute(IResourceSink sink) {
 		System.out.println("tick");
 	}
 

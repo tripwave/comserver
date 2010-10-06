@@ -26,7 +26,8 @@ package com.thebitstream.comserver.stream
 	import flash.net.Responder;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	import flash.utils.setInterval;
+	import flash.utils.setTimeout;
+
 	/**
 	 * 
 	 * @author Andy Shaules
@@ -172,7 +173,7 @@ package com.thebitstream.comserver.stream
 				//closed beore opened?
 				if(_closed)
 				{
-					setInterval(doClose,250);
+					setTimeout(doClose,250);
 					return;	
 				}
 				if( _resource.isEventSink )

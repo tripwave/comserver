@@ -18,8 +18,7 @@ import java.util.Map;
 import jinngine.collision.SAP2;
 import jinngine.geometry.Box;
 import jinngine.geometry.Sphere;
-import jinngine.math.Matrix3;
-import jinngine.math.Matrix4;
+
 import jinngine.math.Quaternion;
 import jinngine.math.Vector3;
 import jinngine.physics.Body;
@@ -162,146 +161,7 @@ public class CapsuleExample {
 			}
 		}
 	}
-	public final void quaternionToEuler(final Quaternion q1, final Vector3 euler) {
-		double heading, attitude, bank;
-		
-		double test = q1.v.x * q1.v.y + q1.v.z * q1.s;
-		
-	//	System.out.println("z:"+q1.v.z+" y:"+q1.v.y+" x:"+ q1.v.x+" s:"+q1.s);
-		
-		boolean t1=( ( q1.v.z > 0 ) );
-		boolean t2=( ( q1.s > 0 ) );
-		
-		if (test > 0.5 - 1e-7) { // singularity at north pole
-			System.out.println("c 1");
-			heading = 2 * Math.atan2(q1.v.x, q1.s);
-			attitude = Math.PI / 2;
-			bank = 0;
-		} else if (test < -0.5 + 1e-7) { // singularity at south pole
-			System.out.println("c 2");
-			heading = -2 * Math.atan2(q1.v.x, q1.s);
-			attitude = - Math.PI / 2;
-			bank = 0;
-		} else {
-			
-			double sqx = q1.v.x * q1.v.x;
-			double sqy = q1.v.y * q1.v.y;
-			double sqz = q1.v.z * q1.v.z;
-			
-			heading = Math.atan2(2 * q1.v.y * q1.s - 2 * q1.v.x * q1.v.z, 1 - 2 * sqy - 2 * sqz);
-			
-			attitude = Math.asin(2 * test);
-			
-			bank = Math.atan2(2 * q1.v.x * q1.s - 2 * q1.v.y * q1.v.z, 1 - 2 * sqx - 2 * sqz);
-			
-			
-		
-		}
-		
 
-		
-		bank=bank  *  180 / Math.PI;
-		heading=heading * 180 / Math.PI;
-		attitude=attitude * 180 / Math.PI;
-
-
-			System.out.println((test < 0)+" "+t1 +"  "+t2+":"+attitude );
-			//attitude=360-attitude;
-
-
-
-		
-		
-		// return values
-		euler.x = bank ;
-		euler.y = heading ;
-		euler.z = attitude ;
-		
-	}
-	/**
-	 *  This is wrong...
-	 * @param mat
-	 * @return
-	 */
-	public Vector3 getEulerAngles(Matrix4 mat) {
-
-		double lAngleY = Math.asin(mat.a13);
-		double lCos = Math.cos(lAngleY);
-
-		lAngleY *= 180 / Math.PI;
-
-		double lTrx = 0;
-		double lTry = 0;
-		double lAngleX = 0;
-		double lAngleZ = 0;
-
-		lTrx = mat.a33 / lCos;
-		lTry = mat.a23 / lCos;
-		lAngleX = Math.atan2(lTry, lTrx);
-
-		lTrx = mat.a11 / lCos;
-		lTry = -mat.a12 / lCos;
-		lAngleZ = Math.atan2(lTry, lTrx);
-
-		lAngleX *= 180 / Math.PI;
-		lAngleZ *= 180 / Math.PI;
-
-		if (lAngleX < 0)
-			lAngleX += 360;
-		if (lAngleY < 0)
-			lAngleY += 360;
-		if (lAngleZ < 0)
-			lAngleZ += 360;
-		if (lAngleX > 360)
-			lAngleX -= 360;
-		if (lAngleY > 360)
-			lAngleY -= 360;
-		if (lAngleZ > 360)
-			lAngleZ -= 360;
-
-		return new Vector3(lAngleX, lAngleY, lAngleZ);
-	}
-	/** this conversion uses conventions as described on page:
-	*   http://www.euclideanspace.com/maths/geometry/rotations/euler/index.htm
-	*   Coordinate System: right hand
-	*   Positive angle: right hand
-	*   Order of euler angles: heading first, then attitude, then bank
-	*   matrix row column ordering:
-	*   [m00 m01 m02]
-	*   [m10 m11 m12]
-	*   [m20 m21 m22]
-	*   
-	*   [m11 m12 m13]
-	*   [m21 m22 m23]
-	*   [m31 m32 m33]*/
-	
-	public final Vector3 rotate(Matrix3  m) {
-		double heading, attitude, bank;
-		Vector3 ret= new Vector3();
-		// Assuming the angles are in radians.
-		if (m.a21 > 0.998) { // singularity at north pole
-			heading = Math.atan2(m.a13,m.a33);
-			attitude = Math.PI/2;
-			bank = 0;
-			
-			
-		}else
-		if (m.a32 < -0.998) { // singularity at south pole
-			heading = Math.atan2(m.a13,m.a33);
-			attitude = -Math.PI/2;
-			bank = 0;
-			
-			
-		}else{
-		heading = Math.atan2(-m.a31,m.a11);
-		bank = Math.atan2(-m.a23,m.a22);
-		attitude = Math.asin(m.a21);
-		}
-		ret.y=heading;
-		ret.x=attitude;
-		ret.z=bank;
-		return ret;
-	}
 	
 	
 	@SuppressWarnings("unchecked")

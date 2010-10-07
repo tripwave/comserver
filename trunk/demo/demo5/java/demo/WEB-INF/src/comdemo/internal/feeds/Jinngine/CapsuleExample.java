@@ -31,7 +31,7 @@ import jinngine.physics.force.GravityForce;
 import jinngine.physics.solver.NonsmoothNonlinearConjugateGradient;
 
 import com.thebitstream.comserver.nodes.IConnectionNode;
-import comdemo.internal.feeds.Jinngine.body.InteractiveBody;
+import comdemo.internal.feeds.Jinngine.body.InteractiveBody;;
 
 public class CapsuleExample {
 	private final Scene scene;

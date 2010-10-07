@@ -16,10 +16,7 @@ public class BumpService {
 	}
 	public int bumpMe(Map<Object,Object> data){
 		IConnectionNode node= (IConnectionNode) Red5.getConnectionLocal().getAttribute(IResourceSink.PROP_NODE);
-		
-		sim.getCap().addBump(node.getNodeId(),data);
-		
+		sim.getCap().addBump(node,data);
 		return 1;
-	
 	}
 }

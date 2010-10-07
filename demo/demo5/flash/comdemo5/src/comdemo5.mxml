@@ -7,6 +7,8 @@
 	<fx:Style source="comdemo5.css"/>
 	<fx:Script>
 		<![CDATA[
+
+			
 			import away3dlite.containers.Scene3D;
 			import away3dlite.containers.View3D;
 			import away3dlite.materials.WireColorMaterial;
@@ -27,13 +29,18 @@
 			private var sprite:Sprite;
 			private var handle:String;
 			
-		
+			
+			
+			
+			
 			private function boot():void{
+				
+				
 				
 				button.enabled=false;
 				button.visible=false;
 				
-				ResourceProxy.BUFFER=0.05;
+				ResourceProxy.BUFFER=0;
 								
 				resource=new Resource("rtmp://localhost/comdemo","room:group");
 				
@@ -43,14 +50,14 @@
 				if(idRadBox.selected){
 				
 					data={geometry:"box",
-					x:-6*Math.random(),y:-24*Math.random()+20,z:-25.1,
+						x:0.1,y:20.1,z:25.1,
 					sX:6.0,sY:6.0,sZ:6.0};
 				
 					handle="box"+id.toString();
 				}else{
 					
 					data={geometry:"sphere",
-					x:-6*Math.random(),y:-24*Math.random()+20,z:-25.1,
+					x:0.1,y:20.1,z:25.1,
 					radius:3.0};
 				
 				 	handle="sphere"+id.toString();				
@@ -66,12 +73,15 @@
 				sprite=new Sprite();
 				s3d=new Scene3D();
 				view=new View3D(s3d);
-				view.camera.z=-30;
-				view.camera.y=-20;
-				view.camera.rotationX=-20;
+			
+				view.camera.z=0;
+				view.camera.y=0;
+				view.camera.x=0;
+				view.camera.rotationX=0;
+				
 				sprite.addChild(view);
 				sprite.x=200;
-				sprite.y=200;
+				sprite.y=100;
 				container.addChild(sprite);	
 			}			
 
@@ -79,25 +89,33 @@
 				
 				var bodies:Array=e.data.bodies;	
 				
-				
 				for each(var bod :Object in objects){
-					if(bod)
-					bod.live=false;
+					if(bod){
+						bod.live=false;
+					}
 				}
-					
 					
 				for each(var obj:Object in bodies){
 		
-					
 					if(objects[obj.id]){
-						objects[obj.id].shape.visible=true;
+						
 						objects[obj.id].live=true;
-						objects[obj.id].shape.rotationX=obj.rX*-1;
-						objects[obj.id].shape.rotationY=obj.rY *-1 ;
-						objects[obj.id].shape.rotationZ=obj.rZ *-1;
-						objects[obj.id].shape.x=obj.x ;
-						objects[obj.id].shape.y= -1 * obj.y ;
-						objects[obj.id].shape.z=obj.z ;
+						
+						var o:*=objects[obj.id].shape;
+						
+						o.z=obj.z ;
+						o.y= obj.y * -1;
+						o.x=obj.x ;					
+						
+						var v:Vector.<Vector3D> =	o.transform.matrix3D.decompose(Orientation3D.QUATERNION); 
+						Vector3D(v[1]).x=obj.qX * -1;
+						Vector3D(v[1]).y=obj.qY ;
+						Vector3D(v[1]).z=obj.qZ * -1;
+						Vector3D(v[1]).w=obj.qW;						
+						
+						o.transform.matrix3D.recompose(v,Orientation3D.QUATERNION);		
+						o.visible=true;
+	
 					}else{
 								
 						if(String(obj.id).indexOf("box")> -1 ){
@@ -118,7 +136,7 @@
 							objects[obj.id]={live:true,shape:sphere};
 							objects[obj.id].shape.x= obj.x ;
 							objects[obj.id].shape.y= -1 * obj.y ;
-							objects[obj.id].shape.z=obj.z ;	
+							objects[obj.id].shape.z=obj.z ;
 							
 							view.scene.addChild(sphere);							
 						}
@@ -138,16 +156,18 @@
 
 			private function doBump():void{
 				if(comServ){
-					comServ.connetion.call('jinngine'+ resource.resourceName+'.bumpMe',new Responder(null),{x:0,y:12,z:0});
+					comServ.connetion.call('jinngine'+ resource.resourceName+'.bumpMe',new Responder(null),{x:20,y:20,z:00,mag:100});
 				}
 			}
-			
+
 			public function onComResult(obj:RPCReturn):void{
 				
 			}
+			
 			public function onMetaData(obj:ComEvent):void{
 				
 			}
+			
 			public function onNetStatus(code:String):void{
 				
 			}			
@@ -156,6 +176,6 @@
 	<mx:UIComponent id="container" width="696" height="580" x="10" y="10"/>
 	<s:Button x="247" y="5" id="button" label="Go!" click="boot()"/>
 	<s:RadioButton x="425" y="10"  selected="true" label="Sphere"/>
-	<s:RadioButton x="425" y="36" label="Box" id="idRadBox" width="61" visible="false"/>
+	<s:RadioButton x="425" y="36" label="Box" id="idRadBox" width="61"/>
 	<s:Button x="325" y="5" label="Bump" click="doBump()"/>	
 </s:Application>

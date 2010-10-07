@@ -18,13 +18,20 @@ import java.util.Map;
 import jinngine.collision.SAP2;
 import jinngine.geometry.Box;
 import jinngine.geometry.Sphere;
-
+import jinngine.math.Matrix3;
 import jinngine.math.Matrix4;
+import jinngine.math.Quaternion;
 import jinngine.math.Vector3;
-import jinngine.physics.*;
+import jinngine.physics.Body;
+import jinngine.physics.DefaultDeactivationPolicy;
+import jinngine.physics.DefaultScene;
+import jinngine.physics.Scene;
 import jinngine.physics.force.Force;
 import jinngine.physics.force.GravityForce;
 import jinngine.physics.solver.NonsmoothNonlinearConjugateGradient;
+
+import com.thebitstream.comserver.nodes.IConnectionNode;
+import comdemo.internal.feeds.Jinngine.body.InteractiveBody;
 
 public class CapsuleExample {
 	private final Scene scene;
@@ -55,7 +62,7 @@ public class CapsuleExample {
 		// start jinngine 
 		scene = new DefaultScene(new SAP2(), new NonsmoothNonlinearConjugateGradient(44),
 				new DefaultDeactivationPolicy());
-		scene.setTimestep(0.1);
+		scene.setTimestep(.08);
 
 		// add boxes to bound the world
 		Body floor = new Body("floor", new Box(1500, 20, 1500));
@@ -63,19 +70,19 @@ public class CapsuleExample {
 		floor.setFixed(true);
 
 		Body back = new Body("back", new Box(200, 200, 20));
-		back.setPosition(new Vector3(0, 0, -55));
+		back.setPosition(new Vector3(0, 0,0));
 		back.setFixed(true);
 
 		Body front = new Body("front", new Box(200, 200, 20));
-		front.setPosition(new Vector3(0, 0, -7));
+		front.setPosition(new Vector3(0, 0, 50));
 		front.setFixed(true);
 
 		Body left = new Body("left", new Box(20, 200, 200));
-		left.setPosition(new Vector3(-35, 0, 0));
+		left.setPosition(new Vector3(-25, 0, 0));
 		left.setFixed(true);
 
 		Body right = new Body("right", new Box(20, 200, 200));
-		right.setPosition(new Vector3(35, 0, 0));
+		right.setPosition(new Vector3(25, 0, 0));
 		right.setFixed(true);
 
 		// add all to scene
@@ -123,8 +130,12 @@ public class CapsuleExample {
 					box.setPosition(new Vector3(x, y, z));
 					scene.addBody(box);
 					data.put("body", box);
-					box.setAngularVelocity(0, 0, 2);
+					box.setAngularVelocity(0, 0, 0);
 					GravityForce force = new GravityForce(box);
+					InteractiveBody iBody=new InteractiveBody(id,box, force);
+					data.put("interactive", iBody);
+					scene.addForce(iBody.bump);
+					scene.addForce(force);
 					scene.addForce(force);
 					data.put("gravity", force);
 					bodies.put(id, box);
@@ -132,25 +143,81 @@ public class CapsuleExample {
 				} else if (geoType.equals("sphere")) {
 					double rad = ((Integer) data.get("radius"));
 					Sphere sphere = new Sphere(rad);
-
 					Body sphereBody = new Body(id, sphere);
 					sphereBody.setPosition(new Vector3(x, y, z));
 					scene.addBody(sphereBody);
 					data.put("body", sphereBody);
-
+					
 					GravityForce force = new GravityForce(sphereBody);
+					InteractiveBody iBody=new InteractiveBody(id,sphereBody, force);
+					scene.addForce(iBody.bump);
 					scene.addForce(force);
-					sphereBody.setAngularVelocity(0, 0, 8);
+					sphereBody.setAngularVelocity(1, 0, 0);
+					data.put("interactive", iBody);
 					data.put("gravity", force);
 					bodies.put(id, sphereBody);
-
 				}
 				
 				bodiesToAdd.clear();
 			}
 		}
 	}
+	public final void quaternionToEuler(final Quaternion q1, final Vector3 euler) {
+		double heading, attitude, bank;
+		
+		double test = q1.v.x * q1.v.y + q1.v.z * q1.s;
+		
+	//	System.out.println("z:"+q1.v.z+" y:"+q1.v.y+" x:"+ q1.v.x+" s:"+q1.s);
+		
+		boolean t1=( ( q1.v.z > 0 ) );
+		boolean t2=( ( q1.s > 0 ) );
+		
+		if (test > 0.5 - 1e-7) { // singularity at north pole
+			System.out.println("c 1");
+			heading = 2 * Math.atan2(q1.v.x, q1.s);
+			attitude = Math.PI / 2;
+			bank = 0;
+		} else if (test < -0.5 + 1e-7) { // singularity at south pole
+			System.out.println("c 2");
+			heading = -2 * Math.atan2(q1.v.x, q1.s);
+			attitude = - Math.PI / 2;
+			bank = 0;
+		} else {
+			
+			double sqx = q1.v.x * q1.v.x;
+			double sqy = q1.v.y * q1.v.y;
+			double sqz = q1.v.z * q1.v.z;
+			
+			heading = Math.atan2(2 * q1.v.y * q1.s - 2 * q1.v.x * q1.v.z, 1 - 2 * sqy - 2 * sqz);
+			
+			attitude = Math.asin(2 * test);
+			
+			bank = Math.atan2(2 * q1.v.x * q1.s - 2 * q1.v.y * q1.v.z, 1 - 2 * sqx - 2 * sqz);
+			
+			
+		
+		}
+		
 
+		
+		bank=bank  *  180 / Math.PI;
+		heading=heading * 180 / Math.PI;
+		attitude=attitude * 180 / Math.PI;
+
+
+			System.out.println((test < 0)+" "+t1 +"  "+t2+":"+attitude );
+			//attitude=360-attitude;
+
+
+
+		
+		
+		// return values
+		euler.x = bank ;
+		euler.y = heading ;
+		euler.z = attitude ;
+		
+	}
 	/**
 	 *  This is wrong...
 	 * @param mat
@@ -194,7 +261,49 @@ public class CapsuleExample {
 
 		return new Vector3(lAngleX, lAngleY, lAngleZ);
 	}
-
+	/** this conversion uses conventions as described on page:
+	*   http://www.euclideanspace.com/maths/geometry/rotations/euler/index.htm
+	*   Coordinate System: right hand
+	*   Positive angle: right hand
+	*   Order of euler angles: heading first, then attitude, then bank
+	*   matrix row column ordering:
+	*   [m00 m01 m02]
+	*   [m10 m11 m12]
+	*   [m20 m21 m22]
+	*   
+	*   [m11 m12 m13]
+	*   [m21 m22 m23]
+	*   [m31 m32 m33]*/
+	
+	public final Vector3 rotate(Matrix3  m) {
+		double heading, attitude, bank;
+		Vector3 ret= new Vector3();
+		// Assuming the angles are in radians.
+		if (m.a21 > 0.998) { // singularity at north pole
+			heading = Math.atan2(m.a13,m.a33);
+			attitude = Math.PI/2;
+			bank = 0;
+			
+			
+		}else
+		if (m.a32 < -0.998) { // singularity at south pole
+			heading = Math.atan2(m.a13,m.a33);
+			attitude = -Math.PI/2;
+			bank = 0;
+			
+			
+		}else{
+		heading = Math.atan2(-m.a31,m.a11);
+		bank = Math.atan2(-m.a23,m.a22);
+		attitude = Math.asin(m.a21);
+		}
+		ret.y=heading;
+		ret.x=attitude;
+		ret.z=bank;
+		return ret;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public List<Map<Object, Object>> tick() {
 
@@ -210,57 +319,51 @@ public class CapsuleExample {
 
 				while (bumpKeys.hasNext()) {
 					String id = bumpKeys.next().toString();
-
 					Body bumped = (Body) bodies.get(id);
 
 					if (bumped != null) {
-						Vector3 bpos = bumped.getVelocity();
+						
 						Map<Object, Object> da = (Map<Object, Object>) bumps.get(id);
 						int x = (Integer) da.get("x");
 						int y = (Integer) da.get("y");
 						int z = (Integer) da.get("z");
-
-						bpos.add(x, y, z);
-						bumped.setVelocity(x + bpos.x, y + bpos.y, z + bpos.z);
+						int m = (Integer) da.get("mag");
+						InteractiveBody iBody = (InteractiveBody) da.get("interactive");
+						iBody.bump.setDirection(new Vector3(x,y,z));
+						iBody.bump.setMagnitude( m );
 					}
 				}
 			}
-
 			bumps.clear();
 		}
-
+		
 		scene.tick();
-
+		
 		Iterator<String> keys = bodies.keySet().iterator();
-
 		while (keys.hasNext()) {
 			String key = keys.next();
 			Map<Object, Object> b = new HashMap<Object, Object>();
-
 			Body bod = (Body) bodies.get(key);
 			Vector3 pos = bod.getPosition();
-			Matrix4 mat = bod.getTransform();
-			Vector3 rots = getEulerAngles(mat);
-
-			b.put("rX", rots.x);
-			b.put("rY", rots.y);
-			b.put("rZ", rots.z);
-
+			Quaternion q =bod.state.orientation;
+			b.put("qX", q.v.x);
+			b.put("qY", q.v.y);
+			b.put("qZ", q.v.z);
+			b.put("qW", q.s);
 			b.put("x", pos.x);
 			b.put("y", pos.y);
 			b.put("z", pos.z);
 			b.put("id", bod.identifier);
-
 			ret.add(b);
 		}
 
 		return ret;
-
 	}
 
-	public void addBump(String id, Map<Object, Object> data) {
+	public void addBump(IConnectionNode id, Map<Object, Object> data) {
 		synchronized (bumps) {
-			bumps.put(id, data);
+			data.put("interactive", id.getNodeData().get("interactive"));
+			bumps.put(id.getNodeId(), data);
 		}
 	}
 
@@ -274,11 +377,12 @@ public class CapsuleExample {
 			while (keys.hasNext()) {
 				String key = keys.next().toString();
 				Map<Object, Object> data = (Map<Object, Object>) bodiesToRemove.get(key);
-				scene.removeForce((Force) data.get("gravity"));
+				InteractiveBody iBody= (InteractiveBody) data.get("interactive");
 				Body body = (Body) data.get("body");
+				scene.removeForce((Force) data.get("gravity"));
+				scene.removeForce(iBody.bump);
 				scene.removeBody(body);
 				bodies.remove(key);
-
 			}
 			bodiesToRemove.clear();
 		}

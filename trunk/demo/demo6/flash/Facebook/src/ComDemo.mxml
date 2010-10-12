@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="350" minHeight="600"
+			   applicationComplete="init()"
+			   implements="com.thebitstream.comserver.stream.IClient"
+			   width="750" height="600" xmlns:ns1="*" preloaderChromeColor="#5D5FAD">
+	
+
+	<fx:Script>
+		<![CDATA[
+			import com.facebook.graph.Facebook;
+			import com.thebitstream.comserver.stream.ComEvent;
+			import com.thebitstream.comserver.stream.IClient;
+			import com.thebitstream.comserver.stream.RPCReturn;
+			import com.thebitstream.comserver.stream.Resource;
+			import com.thebitstream.comserver.stream.ResourceProxy;
+			
+			import flash.utils.setTimeout;
+			
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			
+			
+
+			protected var image:String;
+			private const APPID:String='YOUR APP ID';
+			
+			protected var comServ:ResourceProxy;
+			protected var resource:Resource;
+			private var players:Object={};
+			
+			
+			private var friends:Array=[];
+			private var user:Object={};
+			private var sharedObject:SharedObject;
+			private var isInit:Boolean=false;
+			
+			/**
+			 * Public shared properties.
+			 */
+			public function get properties():Object{
+				return {about:user.about, name:user.name, image:image,
+					displayClass:"flash.display.MovieClip",//use your own desired flash lib definition
+					x:Math.random()*100, y:Math.random()*100};	
+			}
+			
+			protected function init():void {
+				Facebook.init(APPID, handleLogin);
+			}
+			
+			private function onSync(se:SyncEvent):void{
+				
+				sharedObject=se.target as SharedObject;
+				if(!isInit && sharedObject){
+					isInit=true;
+					sharedObject.setProperty(user.id,properties);
+					return;
+				}
+				for(var i:int=0;i<se.changeList.length;i++){
+					if(se.changeList[i].name != null){
+						var updated:String=se.changeList[i].name;
+						
+						
+						if(! players[updated])
+						{
+							players[updated]=createDisplayObject(sharedObject.data[updated] ); 
+							idPlayerCanvas.addChild(players[updated]);
+						}else{
+							for(var propName:String in sharedObject.data[updated]){
+								players[updated][propName]=sharedObject.data[updated][propName];
+							}
+						}
+					}
+				}
+				
+				for(var pid:String in players){
+					if(! sharedObject.data[pid] ){
+						idPlayerCanvas.removeChild(players[pid]);
+						delete players[pid];
+					}
+				}
+				
+
+			}
+			
+			private function createDisplayObject(obj:Object):*
+			{
+				var a:ApplicationDomain;
+				var Player:Class= ApplicationDomain.currentDomain.getDefinition(obj.displayClass) as Class;
+				var player:*=new Player();
+				player.data=obj;
+				var loader:Loader=new Loader();
+				loader.load(new URLRequest(obj.image));
+				player.addChild(loader);
+				trace("created "+obj.displayClass+" for user "+obj.name);
+				
+				return 	player;
+			}
+			
+			protected function handleLogin(response:Object, fail:Object=null):void {
+				if (response == null) {
+					ExternalInterface.call('redirect');
+					return;
+				}
+				changeToLoginState();				
+			}
+						
+			protected function changeToLoginState():void {
+				image= Facebook.getImageUrl(Facebook.getSession().uid);
+				getMe();
+			}
+
+			protected function getMe():void {
+				Facebook.api("/me", handleAPIComplete2);
+			}
+			protected function handleAPIComplete2(success:Object, fail:Object):void {
+				if(user){
+				user=success;	
+					doRedConnect();
+				}
+				
+			}
+			
+			private function doRedConnect():void{			
+			trace("doRedConnect");
+				getFriends();
+				
+				trace(FlexGlobals.topLevelApplication.parameters.token); 
+					resource=new Resource("rtmp://yourdomain.com/comdemo", "comdemo:room:one");
+					comServ=new ResourceProxy(resource,this,FlexGlobals.topLevelApplication.parameters.token,properties);				
+
+			}
+			
+			
+			protected function handleAPIComplete3(success:Object, fail:Object):void {
+				trace("on Friends");
+				if(success)
+				friends=success as Array;
+			}	
+			
+			protected function handleSessionChanged(success:Object, fail:Object=null):void {
+				if(success)
+				changeToLoginState();
+			}
+			
+			protected function handleLogout(success:Object, fail:Object=null):void {
+				
+			}
+			
+			
+			protected function getUIType(type:String):Object {
+				var o:Object;
+				
+				switch(type) {
+					case 'stream.publish':
+						var actionLink:Object={ text: 'Get it here', href: 'http://code.google.com/p/comserver/' };
+						
+						var actionArray:Array=[];
+						
+						actionArray.push(actionLink);
+											
+						o = {
+						message: 'Learning how to connect red5 to facebook',
+						attachment: {
+							name: 'ComDemo',
+							caption: 'A Red5 Application',
+							description:'Built with flex and java.' ,
+							href: 'http://apps.facebook.com/comdemo/'
+						},
+						action_links: actionArray
+						,
+						user_prompt_message: 'Share your thoughts about Red5'
+					};
+						break;
+					case 'stream.share':
+						o = {
+						u: 'http://apps.facebook.com/comdemo/'
+					};
+						break;
+					case 'bookmark.add':
+						o = {};
+						break;
+				}
+				return o;
+			}
+			
+			protected function requestFriend(fid:String):void {//friends.add
+				var o:Object = {id:fid	};
+				Facebook.ui("friends.add",null,o);
+			}			
+			protected function streamPublish():void {//friends.add
+				Facebook.ui("stream.publish",null, getUIType('stream.publish'));
+			}
+			
+			protected function streamShare():void {
+				Facebook.ui("stream.share",null, getUIType('stream.share'));
+			}
+			
+			protected function getFriends():void{
+				Facebook.api("/me/friends", handleAPIComplete3);
+			}
+
+			public function onComResult(obj:RPCReturn):void{
+				
+			}
+			
+			public function onMetaData(obj:ComEvent):void{
+
+			}
+			public function onNetStatus(stat:String):void{
+				trace(stat);
+				if(stat=="NetConnection.Connect.Success"){
+					sharedObject=SharedObject.getRemote("comDemo",comServ.connetion.uri);
+					sharedObject.client=this;
+					sharedObject.addEventListener(SyncEvent.SYNC,onSync);
+					sharedObject.connect(comServ.connetion);
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<mx:UIComponent id="idPlayerCanvas" width="700" height="490" y="45" horizontalCenter="0">
+	</mx:UIComponent>
+
+	
+	
+</s:Application>

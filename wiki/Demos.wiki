@@ -26,3 +26,11 @@ Update: Rotation angles fixed, and server side Jinngine api usage corrected.
 Jinngine: [http://code.google.com/p/jinngine/ http://code.google.com/p/jinngine/]
 
 away3dlite: [http://away3d.com/ http://away3d.com/]
+===Demo 6===
+Demo 6: Identity and authorization demo using facebook user id. The demo uses the flash facebook api in an IFrame, verifies the facebook parameters, and encodes the user id, and user type into a token for the red5 ComServer framework. I'll assume you are familiar with the facebook application platform and can set up your own IFrame app at facebook.com.
+
+The demo uses the Facebook api to request permissions. Once given, the IFrame is reloaded, and the token generated for red5. Next the user and list of friend id's are retrieved. The user then creates a set of properties to share, connects and joins a shared object. Once fully connected and shared object data set, for each user defined in the shared object, the user's image is loaded onto a sprite and place onstage.
+
+This swf file is based on the IFrame demo from the facebook flash API
+
+facebook flash API:[http://code.google.com/p/facebook-actionscript-api/]

@@ -38,8 +38,7 @@ public class AxisCamera implements Runnable, IResourceFeed {
 	}
 
 	public void start() {
-		appletThread = new Thread(this);
-		appletThread.start();
+
 	}
 
 	public void stop() {

@@ -19,7 +19,7 @@ if (isset($_GET['session']))
 	$sig=strrpos($session,"}");	
 	$session= substr($session,1,$sig-1 );
 
-	$rep = array('"');
+	$rep = array('"','\\');
 
 	$tok = strtok($session, ",");
 

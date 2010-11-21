@@ -18,14 +18,15 @@ import com.thebitstream.comserver.stream.IResourceSink;
 public class FLVFeed extends Thread implements IResourceFeed {
 
 	public List<IResourceSink> streams=new ArrayList<IResourceSink>();
+		
 	public List<String> files=new ArrayList<String>();
+	
 	private boolean doRun;
 
 	private int lastTime;
 
 	private long startTime;
 	private int streamTime;
-	
 	private IMessageInput msgIn;
 	private IProviderService providerService;
 	private IScope filesScope;
@@ -41,12 +42,12 @@ public class FLVFeed extends Thread implements IResourceFeed {
 	@Override
 	public void addResourceSink(IResourceSink arg0) {
 		streams.add(arg0);
-
 	}
 
 	@Override
+
 	public void execute(IResourceSink sink) {
-		System.out.println("tick");
+		
 	}
 
 	@Override
@@ -67,7 +68,8 @@ public class FLVFeed extends Thread implements IResourceFeed {
 	public void run(){
 		
 		try {//let server start up.
-			Thread.sleep(2000);
+
+			Thread.sleep(10000);
 		} catch (InterruptedException e1) {
 			
 			e1.printStackTrace();
@@ -151,11 +153,15 @@ public class FLVFeed extends Thread implements IResourceFeed {
 					doSleep((int) (streamTime-now));
 				}
 				
-				
-				
 				lastTime=time;
 				for(int i=0; i < streams.size() ; i ++){
-					streams.get(i).getStream().dispatchEvent(lMsg.getBody());
+				
+				
+					long delta=startTime-streams.get(i).getStream().getCreationTime();
+					
+					lMsg.getBody().setTimestamp((int)  delta + time );
+					
+					streams.get(i).getStream().dispatchStreamEvent(lMsg.getBody());
 				}
 			}
 				} catch (IOException e) {

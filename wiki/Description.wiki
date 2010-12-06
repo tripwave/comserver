@@ -1,5 +1,5 @@
 #summary Why I decided to try dynamic FLV streams.
-#labels Featured,Phase-Implementation
+#labels Phase-Implementation
 
 =ComServer=
 

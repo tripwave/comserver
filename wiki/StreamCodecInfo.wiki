@@ -1,1 +1,0 @@
-Red5 core class.

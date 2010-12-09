@@ -32,7 +32,8 @@ public class FLVNode extends Thread implements IComserverNode , IConsumer{
 Within a do/while loop , continue to get the next message from the vod provider and check if it is a Notify. We are looking for our init cue point to retrieve our node data, and our add cue point to start our subscription to the resource stream.
 
 {{{
-IMessage msg;
+                        IMessage msg;
+
 			try {
 				
 				msg = msgIn.pullMessage();
@@ -90,5 +91,3 @@ Pre-recorded data feeds are very handy in games, and could even be the source of
 {{{
 
 }}}
-
-

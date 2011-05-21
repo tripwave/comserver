@@ -28,6 +28,7 @@ import org.red5.server.api.Red5;
 
 import com.thebitstream.comserver.app.INodeDataFactory;
 import com.thebitstream.comserver.nodes.IComserverNode;
+import com.thebitstream.comserver.nodes.IConnectionNode;
 import com.thebitstream.comserver.stream.IResourceSink;
 import com.thebitstream.comserver.stream.Resource;
 /**
@@ -114,11 +115,16 @@ public class ServiceHandler implements IServiceHandler{
 		data.put("id",Red5.getConnectionLocal().getAttribute(Resource.PROP_ID));		
 		
 		for (int y = 0 ; y < owner.processors.size() ; y ++){
+			
 			if(!owner.processors.get(y).processPacket((IComserverNode) Red5.getConnectionLocal().getAttribute(Resource.PROP_NODE), data))
 				return 0;
 		}
 		
-		Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, owner._dataFactory.createData(data.get("id").toString(), data));							
+		IConnectionNode node = (IConnectionNode) Red5.getConnectionLocal().getAttribute(IResourceSink.PROP_NODE);
+		
+		node.getNodeData().putAll(data);		
+		
+		//Red5.getConnectionLocal().setAttribute(Resource.PROP_DATA, owner._dataFactory.createData(data.get("id").toString(), data));							
 		
 		return 1;
 	}	

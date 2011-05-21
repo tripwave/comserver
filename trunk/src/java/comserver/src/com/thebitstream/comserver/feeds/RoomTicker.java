@@ -19,9 +19,14 @@
 package com.thebitstream.comserver.feeds;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.red5.io.utils.ObjectMap;
+import org.red5.server.net.rtmp.event.Notify;
+import org.red5.server.net.rtmp.event.VideoData;
 
 import com.thebitstream.comserver.feeds.SimpleFeedBase;
 import com.thebitstream.comserver.nodes.IComserverNode;
@@ -73,7 +78,37 @@ public class RoomTicker extends SimpleFeedBase{
 			data.put("parted", parted);
 			
 			// create FLV invocation.
-			resourceSink.getStream().dispatchEvent(InvocationFactory.createNotifyEvent("onTick",data ));		
+			
+			// the flv tags here are the same tags that the action script codecs create. 
+			// they do not have the full wrapper that is applied by the transcoder object;
+			Map<String,VideoData> vData=new HashMap<String,VideoData>();
+			
+			// lets assume that this map contains up to n number of channels, 
+			// and represents all the next frames 
+			// that fall within up to a 100 millisecond window
+			// from each channel. The smaller the window the better I imagine, 
+			// to insure even spray of data accross the set.
+			
+			Iterator<String> channelCueable = vData.keySet().iterator();
+			
+			while(channelCueable.hasNext()){
+				//assume file name is channel
+				String channel = channelCueable.next();
+				//same structure as tag as3 video codec.
+				VideoData event = vData.get(channel);
+
+				Map<Object,Object> params=new HashMap<Object,Object>();
+				//this event goes to a Transcoder. 
+				//private function onTag(sde:StreamDataEvent):void
+				//using the channel names, feed tags to separate netstreams.
+				params.put(channel, event);
+				
+				Notify invoke = InvocationFactory.createNotifyEvent("videoData", params);
+				resourceSink.getStream().dispatchEvent(invoke);
+			}
+			
+			
+					
 			
 			parted.clear();
 			joined.clear();

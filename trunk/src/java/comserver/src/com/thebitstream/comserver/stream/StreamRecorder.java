@@ -61,10 +61,8 @@ public class StreamRecorder implements IStreamListener {
 		
 		try {
 			
-			RTMPMessage message=new RTMPMessage();
-			
-			message.setBody((IRTMPEvent) packet);
-			
+			RTMPMessage message=RTMPMessage.build((IRTMPEvent) packet);
+		
 			streamProxy.pushMessage(null, (IMessage) message);
 		
 		} catch (IOException e) {

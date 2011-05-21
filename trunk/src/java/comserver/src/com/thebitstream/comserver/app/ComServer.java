@@ -235,6 +235,7 @@ public abstract class ComServer extends MultiThreadedApplicationAdapter implemen
 	public void roomStop(IScope room) {
 		
 		List<IResourceSink> resToRemove=new ArrayList<IResourceSink>();
+		
 		Iterator<IResourceSink> games = feedObjects.iterator();
 
 		while (games.hasNext()) 
@@ -271,7 +272,7 @@ public abstract class ComServer extends MultiThreadedApplicationAdapter implemen
 	public boolean isPlaybackAllowed(IScope room, String name, int start, int length, boolean flushPlaylist) 
 	{
 		
-		String target=name.toLowerCase();
+		String target=name;
 		
 		if(target.endsWith(".flv")){
 			return true;
@@ -280,7 +281,8 @@ public abstract class ComServer extends MultiThreadedApplicationAdapter implemen
 		IResourceSink resource = getResourceStream(room, name);
 		
 		if(resource == null){
-				return false;
+				
+			return false;
 		}
 		
 			
@@ -371,8 +373,6 @@ public abstract class ComServer extends MultiThreadedApplicationAdapter implemen
 	public IClientProxyAdapter  createAdapter(IResourceSink resource) {
 	
 		Service adapter= new Service(resource,dataFactory);
-		
-	
 		
 		return adapter;
 

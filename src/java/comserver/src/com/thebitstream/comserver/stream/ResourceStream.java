@@ -239,14 +239,14 @@ public class ResourceStream implements IResourceStream {
 				 if (_metaDataEvent != null) 
 				 {
 					log.debug("Sending meta data");
-					RTMPMessage msgM = new RTMPMessage();
+					
 					int audioTime= getCurrentTimestamp();
 					_metaDataEvent.setTimestamp(audioTime);
 					_metaDataEvent.setHeader(new Header());
 					_metaDataEvent.getHeader().setTimer(audioTime);
 					_metaDataEvent.getHeader().setTimerBase(audioTime);
+					RTMPMessage msgM = RTMPMessage.build(_metaDataEvent);
 					
-					msgM.setBody(_metaDataEvent);
 					try {
 						((PlayEngine) consumer).pushMessage(null, msgM);
 						
@@ -274,8 +274,8 @@ public class ResourceStream implements IResourceStream {
 			
 			
 			if (mLivePipe != null) {
-				RTMPMessage msg = new RTMPMessage();
-				msg.setBody(rtmpEvent);
+				RTMPMessage msg =  RTMPMessage.build(rtmpEvent);
+				
 				
 				try {
 					sendMetaData();
@@ -317,8 +317,8 @@ public class ResourceStream implements IResourceStream {
 			
 			
 			if (mLivePipe != null) {
-				RTMPMessage msg = new RTMPMessage();
-				msg.setBody(rtmpEvent);
+				RTMPMessage msg =RTMPMessage.build(rtmpEvent);
+				
 				
 				try {
 					sendMetaData();

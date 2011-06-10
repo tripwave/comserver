@@ -34,3 +34,6 @@ This swf file is based on the IFrame demo from the facebook flash API
 facebook flash API:[http://code.google.com/p/facebook-actionscript-api/]
 ===Demo 7===
 IP cam monitor in it's most basic form. A resource feed connects to some ip cam image address, converts to screen video codec, and streams to clients through resource proxy comstream. Also works with some regular jpegs. Included is the original java ip cam code to experiment with. Included is a jpeg sample image in case you want to try without having an ip cam. Not all ip cam image formats will work 'out of the box' with this code. It is intended as only a starting point. I hope to revisit ip cams in the future to explore cams with pre-compressed formats besides jpeg.
+===Jacuda Encoder===
+Hardware H264 encoder sample. Requires a webcam, windows 7 and a 'Tesla' or 'Fermi' GPU. The demo consists of a red5 webapp, a publishing client, and a playback client. The publisher will load a camera via jni interface, create the nVidia Hardware encoder, and begin streaming to the application , or any other application you specify.
+While not exactly a comserver application, this demo shares many aspects of the internal core of the comserver. 

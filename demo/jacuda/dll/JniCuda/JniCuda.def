@@ -1,0 +1,6 @@
+; JniCuda.def : Declares the module parameters for the DLL.
+
+LIBRARY      "JniCuda"
+
+EXPORTS
+    ; Explicit exports can go here

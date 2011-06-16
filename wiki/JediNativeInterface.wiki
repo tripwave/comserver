@@ -10,7 +10,7 @@ Basically I want to use the red5 rtmp client directly from my directshow applica
 
 = Details =
 
-The interface consists of a red5 plugin that resides in the plugins folder of your red5 installation, and a c++ class that loads this jar into a VM. NOw, it does not start red5, it just makes all the classes available. You could call for the red5 'Bootstrap' class and start red5 if you wanted too.
+The interface consists of a red5 plugin that resides in the plugins folder of your red5 installation, and a c++ class that loads this jar into a VM. Now, it does not start red5, it just makes all the classes available. You could call for the red5 'Bootstrap' class and start red5 if you wanted too.
 
 Once loaded, the jar sets up the system class path the same manner as red5 would, including config folder, spring logging, and all other jars included in the lib folder.
 

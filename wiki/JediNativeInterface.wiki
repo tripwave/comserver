@@ -18,7 +18,7 @@ The safest way to use the classes is to build a handler inside the jni plugin an
 
 I created a class called 'ChannelOut' in the plugin that safely wraps the RTMPClient using code from the StreamingProxy red5 class as a start. The Class is registered in the JNI Bootstrap jar, and a corresponding  c++ class is created to interface with it in a nice, somewhat OOP way.
 
-Note: 'pushFrame' in this first version only accepts h264 avc bytestream, which is parsed into flv video packets and pushed out of the rtmp client to the target server.
+Note: 'pushFrame' of the c++ rtmp client in this first version only accepts h264 avc bytestream, which is parsed into flv video packets and pushed out of the rtmp client to the target server.
 
 {{{
 	JediNativeInterface * test= new JediNativeInterface();

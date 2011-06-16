@@ -14,7 +14,7 @@ The interface consists of a red5 plugin that resides in the plugins folder of yo
 
 Once loaded, the jar sets up the system class path the same manner as red5 would, including config folder, spring logging, and all other jars included in the lib folder.
 
-The safest way to use the classes is to build a handler inside the jni plugin and deal with the object lifecycle that way. Theoretically, a hard-core programmer could use the 'findClass' JNI method directly if he/she new how to handle the java class.  
+The safest way to use the classes is to build a handler inside the jni plugin and deal with the object lifecycle that way. Theoretically, a hard-core programmer could use the 'findClass' JNI method directly if he/she knew how to handle the java class.  
 
 I created a class called 'ChannelOut' in the plugin that safely wraps the RTMPClient using code from the StreamingProxy red5 class as a start. The Class is registered in the JNI Bootstrap jar, and a corresponding  c++ class is created to interface with it in a nice, somewhat OOP way.
 

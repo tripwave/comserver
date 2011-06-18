@@ -14,7 +14,7 @@ You'll need a good handle on writing c++ and java to enjoy the jni to its full e
 There are two ways to start the red5 server from c++. The obvious method of using the startup scripts is one, and creating it manually in the same way through the creation of a local JVM is the second.
 
 Method 2:
-Assume the pointer the the jni is initialized already.
+Assume the pointer to the jni is initialized already.
 {{{
 class Red5Server : public ICallbackCapable
 {

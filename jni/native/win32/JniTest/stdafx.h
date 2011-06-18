@@ -9,4 +9,4 @@
 #include <iostream>
 #include <tchar.h>
 #include "jni.h"
-
+#include <stdlib.h>

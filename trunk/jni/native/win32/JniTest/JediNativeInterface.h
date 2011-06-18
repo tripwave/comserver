@@ -1,13 +1,19 @@
 
 #include "stdafx.h"
+
 #include "jni.h"
+
+#include "NativeCallbackHandler.h"
 
 #define RED5_HOME "C:\\workspaces\\eclipse\\ComServer\\red5"
 
 typedef jint (WINAPI * MYPROC)(void ** arg1, void ** arg2,void * arg3 );
 
+
 class JediNativeInterface{
 	
+	
+	int iTest;
 	JNIEnv *env;
 	JNIEnv *ref;
     JavaVM *jvm;
@@ -24,14 +30,21 @@ class JediNativeInterface{
 	JavaVMInitArgs vm_args;
 	JavaVMOption options[6];
 
+	NativeCallbackHandler * callback;
 
 
 public:
 
 	JediNativeInterface()
 	{
+		printf("\r\n\r\n\t\t **  JediNativeInterface  **\r\n\r\nUsing:\r\n\r\n");
+		
+		callback=0;
 		env=0;
 		jvm=0;
+		iTest=1;
+		
+		callback=new NativeCallbackHandler();
 	}
 
 	jclass getInstance()
@@ -44,11 +57,19 @@ public:
 		return env;
 	}
 
+	void addCallbackHandler(ICallbackCapable * handler)
+	{
+		callback->addCallbackHandler( handler);
+	}
+
 	void createJNI()
 	{
+
+		
+		
 		options[0].optionString = "-Djava.compiler=NONE";      
 		options[1].optionString = new char[MAX_PATH];
-		sprintf(options[1].optionString , "-Djava.class.path=%s/red5.jar;%s\\plugins\\JediNativeInterface.jar",RED5_HOME,RED5_HOME);
+		sprintf(options[1].optionString , "-Djava.class.path=%s\\conf;%s\\plugins\\JediNativeInterface.jar",RED5_HOME,RED5_HOME,RED5_HOME);
 		options[2].optionString = new char[MAX_PATH];
 		sprintf(options[2].optionString , "-Djava.library.path=%s\\lib\\",RED5_HOME);  
 		options[3].optionString = new char[MAX_PATH];
@@ -60,7 +81,9 @@ public:
 		vm_args.ignoreUnrecognized = TRUE;
 
 		char * pPath;
-
+		
+		::SetEnvironmentVariable("RED5_HOME",RED5_HOME);
+		
 		pPath = getenv ("JAVA_HOME");
 		
 		char javahome[MAX_PATH];
@@ -68,11 +91,12 @@ public:
 		memset(javahome,0,MAX_PATH);
 	 	
 		const char *orig = "\\jre\\bin\\client\\jvm.dll";
+		sprintf(javahome,"%s",pPath);
 
+		printf("JAVA_HOME : %s\r\n\r\n",pPath);
+		
 		sprintf(javahome,"%s%s",pPath,orig);
-
-		printf("%s\r\n",javahome);
-
+		
 		HINSTANCE hJVM = LoadLibrary((LPCSTR) javahome );
 		
 		if (hJVM == NULL)
@@ -99,7 +123,7 @@ public:
 			return ;
 		}
 
-		fprintf(stderr, "Created Java VM\n");
+		fprintf(stderr, "Created Java VM\r\n\r\n");
 
 		 cls = (*env).FindClass( "org/red5/server/plugin/jni/BootstrapJni");
 		
@@ -117,8 +141,15 @@ public:
 			return;
 		}
 
-		fprintf(stderr, "found class\n");
-
+		fprintf(stderr, "Found Jedi Native Interface, creating jni arguments.\r\n\r\n");
+		
+		jobjectArray gts;	
+		
+		jstring pval =(*env).NewStringUTF(RED5_HOME);
+		
+		gts=(*env).NewObjectArray(1,env->FindClass("java/lang/String"), env->NewStringUTF(""));
+		
+		env->SetObjectArrayElement(gts,0,pval);
 
 		mid = (*env).GetStaticMethodID( cls, "main","([Ljava/lang/String;)V");
 		mid2 = (*env).GetStaticMethodID( cls, "initiate","(I)V");
@@ -126,13 +157,18 @@ public:
 		mid4 = (*env).GetStaticMethodID( cls, "config","(ILjava/lang/String;Ljava/lang/String;)V");
 		mid5 = (*env).GetStaticMethodID( cls, "createObject","(Ljava/lang/String;)Ljava/lang/Object;");
 		mid6 = (*env).GetStaticMethodID( cls, "getReference","(Ljava/lang/String;)Ljava/lang/Object;");
+		
+		fprintf(stdout, "Calling Bootstrap..\r\n");
 
-		(*env).CallStaticVoidMethod( cls, mid,NULL);
-		
-		passOwner = (*env).GetStaticMethodID( cls, "passOwner","(Ljava/lang/Object;)V");
-		
-		//(*env).CallStaticVoidMethod( cls, passOwner,this);		
-		//(*env).CallStaticVoidMethod( cls, mid2,0);		
+		(*env).CallStaticVoidMethod( cls, mid,gts);
+
+		jclass cls2 = (*env).FindClass( "org/red5/server/Bootstrap");
+
+		fprintf(stderr, "Starting Jedi Telepathy Handler.\r\n");
+
+		callback->start();	
+					
+		(*env).CallStaticVoidMethod( cls, mid2,0);		
 	}
 
 	jmethodID getReferenceMethodId()
@@ -150,10 +186,16 @@ public:
 		if(env==0)
 			return;
 
-		
+		if(callback)
+		{
+			callback->stop();
+			delete callback;
+			callback=0;
+		}
 		if ((*env).ExceptionOccurred()) 
 		{
 			(*env).ExceptionDescribe();
+			Sleep(30000);
 		}
 		if(cls!=0)
 		(*env).CallStaticVoidMethod( cls, mid3,0);
@@ -168,6 +210,13 @@ public:
 
 	~JediNativeInterface()
 	{
+		if(callback)
+		{
+			callback->stop();
+			delete callback;
+			callback=0;
+		}
+		
 		if(env!=0)
 			destroyJNI();
 

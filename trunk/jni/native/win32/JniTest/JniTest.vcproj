@@ -121,6 +121,9 @@
 				RelativePath=".\JniTest.cpp">
 			</File>
 			<File
+				RelativePath=".\PipeClient.cpp">
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -141,7 +144,19 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
+				RelativePath=".\ICallbackCapable.h">
+			</File>
+			<File
 				RelativePath=".\JediNativeInterface.h">
+			</File>
+			<File
+				RelativePath=".\NativeCallbackHandler.h">
+			</File>
+			<File
+				RelativePath=".\PipeClient.h">
+			</File>
+			<File
+				RelativePath=".\Red5Server.h">
 			</File>
 			<File
 				RelativePath=".\RTMPClient.h">

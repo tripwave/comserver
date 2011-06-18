@@ -4,36 +4,47 @@
 
 #include "JediNativeInterface.h"
 
-#include "RTMPClient.h"
+#include "Red5Server.h"
+
+
+
+
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {		
 	JediNativeInterface * test= new JediNativeInterface();
-
+	
 	test->createJNI();
 
-	RTMPClient * client=0;
+	Red5Server * server= new Red5Server(test);
 
-	//client = new RTMPClient(test);
-	//client->createClient();		
-	//client->setModeVal(0);
-	//client->setAppName("cuda");
-	//client->setHostName("127.0.0.1");
-	//client->setPortNum(1935);
-	//client->setPublishedName("test");
-	//client->initiateCapture();
-	
-	Sleep(10000);
+	test->addCallbackHandler(server);
 
-	if(client){
-		client->close();
-		delete client;
-	}
+	server->boot();
+
+	Sleep(5000);
+	printf(".\r\n");
+	Sleep(1000);
+	printf(".\r\n");
+	Sleep(1000);
+	server->shutdown();
+
+	delete server;
 
 	test->destroyJNI();
-	
+	printf(".\r\n");
+	Sleep(1000);
+	printf(".\r\n");
+	Sleep(1000);
+	printf(".\r\n");
+	Sleep(1000);
+	printf(".\r\n");
 	Sleep(10000);
-	
+	printf(".\r\n");
+	printf(".\r\n");
+
+
 	delete test;
 
 	return 0;

@@ -90,7 +90,7 @@ C++ Callback Registration: Use the method 'addCallbackHandler'.
 
 For simplicity, this example only prints out the request, and returns the RPC channel id that processed the call as "Process by idNum". 
 
-In the C++ hander implementation, the data buffer contains the request and the results are placed into the 'results' buffer. The method returns the actual length of the data placed into the buffer. This is scrammed up and marshaled back to Java.
+In the C++ hanlder implementation, the data buffer contains the request and the results are placed into the 'results' buffer. The method returns the actual length of the data placed into the buffer. This is scrammed up and marshaled back to Java.
 
 {{{
 	int processCall(char * data,char * results)

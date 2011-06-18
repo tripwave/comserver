@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import org.red5.server.net.rtmp.RTMPClient;
 import org.red5.server.net.rtmp.event.IRTMPEvent;
+import org.red5.server.plugin.jni.callback.JNICallback;
 import org.red5.server.stream.message.RTMPMessage;
 
 
@@ -124,9 +125,9 @@ public class ChannelOut implements ICudaListener {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
-		
-		this.id = id;
+	public void setId(final int id) {
+
+		this.id = id;	
 	}
 	public String getHost() {
 		return host;

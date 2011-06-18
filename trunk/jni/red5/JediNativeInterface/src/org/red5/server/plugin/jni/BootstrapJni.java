@@ -18,7 +18,7 @@ import org.red5.server.plugin.jni.objects.net.ChannelOut;
 
 public class BootstrapJni {
 
-	private static String VERSION = "BootstrapJni- v.0.1";
+	private static String VERSION = "BootstrapJni- v-0.1";
 	
 	private static BootstrapJni booter;
 
@@ -60,19 +60,35 @@ public class BootstrapJni {
 	 */
 	public static void main(String[] args) throws Throwable {
 		
-		File files[]=new File[]{new File("C:/workspaces/eclipse/ComServer/red5/lib") };
+		if(args==null || args.length<1){
+			throw new Error("The JNI needs RED5_HOME as an argument");
+			
+		}
+		
+		String curDir = System.getProperty("user.dir");
+		
+		System.out.println("\tBootstrapJni working directory "+ curDir+ "\r\n");
+		System.out.println("\tRED5_HOME "+ args[0]+ "\r\n");
+		String red5Lib=args[0];
+		
+		File files[]=new File[]{new File(red5Lib+"/lib") };
 	
 		List<URL> list = showFiles(files);
 		
-		File redJar=new File("C:/workspaces/eclipse/ComServer/red5/dist/red5.jar");
-		
-		System.out.println("Red5 jar is here ? "+redJar.exists());
+		File redJar=new File(red5Lib+"/red5.jar");
+		File bootstrap=new File(red5Lib+"/boot.jar");
+		File config=new File("/conf");
+		System.out.println("Red5 loaded : "+redJar.exists()+"\r\n");
 		
 		list.add(redJar.toURI().toURL());
+		files=new File[]{config};
+		list.add(bootstrap.toURI().toURL());
+		List<URL> configs = showFiles(files);
+		list.addAll(configs);
 		
 		URL[] jarlist= list.toArray(new URL[list.size()]);		
 				
-		System.out.println(jarlist.length+" Jars loaded");
+		System.out.println(jarlist.length+" Jars Loaded\r\n");
 	
 		forceClasspath(jarlist);
 		
@@ -120,7 +136,7 @@ public class BootstrapJni {
 		for (File file : files) {
 	        if (file.isDirectory()) {
 	        	if(currentDepth<depth){
-	        	  System.out.println("Directory: " + file.getName());
+	        //	  System.out.println("Directory: " + file.getName());
 	        	  resources.addAll(showFiles(file.listFiles())); // Calls same method again.
 	          }
 	        } else {
@@ -129,7 +145,7 @@ public class BootstrapJni {
 	        	
 	        	resources.add(file.toURI().toURL());
 	        	
-	        	System.out.println(file.toURI().toURL());
+	        //	System.out.println(file.toURI().toURL());
 	        }
 	    }
 	
@@ -139,7 +155,8 @@ public class BootstrapJni {
 	
 	public static void initiate(int id){
 		
-			System.out.println("testing initiate");
+			System.out.println("Initiated JNI\r\n");
+			
 			return;
 	}
 	
@@ -183,7 +200,7 @@ public class BootstrapJni {
 	public static void stop(int id){
 		
 		
-			System.out.println("testing stop");
+			System.out.println("Stop JNI \r\n");
 			return;
 		
 

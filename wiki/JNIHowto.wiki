@@ -11,7 +11,7 @@ Here is a collection of code snippets from my jni experiments.
 You'll need a good handle on writing c++ and java to enjoy the jni to its full extent or find it practical for any particular task. 
 
 ==Starting the Red5 Server==
-There are two ways to start the red5 server from c++. The obvious method of using the startup scripts is one, and creating it manually in the same way through the creation of a local JVM.
+There are two ways to start the red5 server from c++. The obvious method of using the startup scripts is one, and creating it manually in the same way through the creation of a local JVM is the second.
 
 Method 2:
 {{{

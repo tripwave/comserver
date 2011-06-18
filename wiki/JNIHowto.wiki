@@ -61,7 +61,7 @@ Whether you need the JVM that you have created to call back on it's own threads,
 On the native side, a class extends the ICallbackCapable base class. This reserves a channel number, currently supporting 1024 asynchronous  callback channels. 
 
 ===Setting the channel id's=== 
-The id's are created automatically, but if you want to use them, you must make the jvm aware of the channel number for a particular class instance. For instance, the RTMPClient in c++ interfaces with the Java class 'ChannelOut' which has a class field 'id'. When the c++ process creates this ChannelOut class in the jvm, it sets the id of it's channel. If the client is registered as a handler with the JNI interface, it can receive calls initiated by the JVM.
+The id's are created automatically, but if you want to use them, you must make the jvm aware of the channel number for a particular class instance. For example, the RTMPClient in c++ interfaces with the Java class 'ChannelOut' which has a class field 'id'. When the c++ process creates this ChannelOut class in the jvm, it sets the id of it's channel. If the client is registered as a handler with the JNI interface, it can receive calls initiated by the JVM.
 
 Setting RPC channel Id to java instance, as implemented in the RTMPClient class. After it is set, any java thread can reference the ChannelOut's id field, create a JNICallback object with that channel id, and invoke an rpc to that c++ class instance.
 {{{

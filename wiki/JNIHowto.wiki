@@ -106,6 +106,14 @@ call(String callParameter, int rpcChannelNumber);
 
 The callback is synchronous and will block while c++ responds, or it will quickly timeout if the pipe server is not available. On the same token, the c++ process that calls the jvm can also be blocked by sleeping/waiting the Thread on the java side.
 
+==Setting an Environment Variable==
+Can't get your app to start? Maybe a variable was not set on the JVM you created.
 
-
-
+At the Header:
+{{{
+#define RED5_HOME "C:\\workspaces\\eclipse\\ComServer\\red5"
+}}}
+In your runtime implementation:
+{{{
+::SetEnvironmentVariable("RED5_HOME",RED5_HOME);
+}}}

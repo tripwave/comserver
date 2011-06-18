@@ -58,9 +58,21 @@ Stopping the red5 server is done by creating a a new jvm and talking to it over 
 ==Initiate RPC Calls From Local Java VMs to C++ Jedi Native Interface==
 Whether you need the JVM that you have created to call back on it's own threads, or if you need arbitrary JVMs to call your native process, it is supported on Windows through traditional JNI and named pipes.
 
-On the native side, a class extends the ICallbackCapable base class. This reserves a channel number, currently supporting 1024 asynchronous  callback channels.
+On the native side, a class extends the ICallbackCapable base class. This reserves a channel number, currently supporting 1024 asynchronous  callback channels. 
 
-C++ settup
+Setting the channel id's. The id's are created automatically, but you must make the jvm aware of the channel number for a particular class instance. 
+
+The RTMPClient in c++ interfaces with the Java class 'ChannelOut' which has a class field 'id'. When the c++ process creates this ChannelOut class, it sets the id of it's channel. If the client is registered as a handler with the interface, it can receive calls initiated by the JVM.
+
+Setting RPC channel Id to java instance, as implemented in the RTMPClient.h file. After it is set, any java thread can reference the ChannelOut's id field, create a JNICallback object with that channel id, and invoke an rpc to that c++ class instance.
+{{{
+jmethodID setId = (*pJni->getEnv()).GetMethodID( cls, "setId","(I)V");
+(*pJni->getEnv()).CallVoidMethod(client,setId,getId());
+}}} 
+
+
+
+C++ setting up callbacks by registration.
 {{{
 	JediNativeInterface * test= new JediNativeInterface();
 	
@@ -73,9 +85,9 @@ C++ settup
 	server->boot();
 }}}
 
-For simplicity, this prints out the request, and returns the RPC channel id that processed the call. 
+For simplicity, this handler only prints out the request, and returns the RPC channel id that processed the call. 
 
-C++ Hander Implementation. The data buffer contains the request and the results are placed into the 'results' buffer while returning the actual length of the data placed into the buffer.
+In the C++ hander implementation, the data buffer contains the request and the results are placed into the 'results' buffer. The method returns the actual length of the data placed into the buffer. This is scrammed up and marshaled back to Java.
 
 {{{
 	int processCall(char * data,char * results)

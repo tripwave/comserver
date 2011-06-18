@@ -123,6 +123,7 @@ call(String callParameter, int rpcChannelNumber);
 
 The callback is synchronous and will block while c++ responds, or it will quickly timeout if the pipe server is not available. On the same token, the c++ process that calls the jvm can also be blocked by sleeping/waiting the Thread on the java side.
 
+
 ==Setting an Environment Variable==
 Can't get your app to start? Maybe a variable was not set on the JVM you created.
 
@@ -133,4 +134,23 @@ At the Header:
 In your runtime implementation:
 {{{
 ::SetEnvironmentVariable("RED5_HOME",RED5_HOME);
+}}}
+
+
+==Adding Arguments to the JVM==
+Look at the JediNativeInterface class in c++. Scroll down to where the arguments are created. Add some more new strings, copy the codes, and dont forget to delete the new strings you made in the 'detstoyJNI' method.
+{{{
+
+
+options[3].optionString = new char[MAX_PATH];
+sprintf(options[3].optionString,"-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true");
+
+}}}
+
+Adding to destroyJNI method.
+
+{{{
+
+delete options[3].optionString;
+
 }}}

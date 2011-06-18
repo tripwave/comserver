@@ -1,0 +1,6 @@
+; JediNativeCallback.def : Declares the module parameters for the DLL.
+
+LIBRARY      "JediNativeCallback"
+
+EXPORTS
+    ; Explicit exports can go here

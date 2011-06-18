@@ -44,7 +44,7 @@ public:
 }}}
 
 ==Stopping the Red5 Server==
-The red5 server is done by creating a a new jvm and talking to it over an admin port. Lets cheat and use the script since this is a shut-down and we will not need to talk to the new jvm after it has done the task.
+Stopping the red5 server is done by creating a a new jvm and talking to it over an admin port. Lets cheat and use the script since this is a shut-down and we will not need to talk to the new jvm after it has done the task.
 
 {{{
 	void shutdown()

@@ -59,7 +59,9 @@ JNIEXPORT jstring JNICALL Java_org_red5_server_plugin_jni_callback_JNICallback_c
 	sprintf((char *)buffer,env->GetStringUTFChars(service, false));
 	
 	printf("sending over %s\r\n",buffer);
+
 	jint chan=(jint)params;
+
 	CPipeClient *client=new CPipeClient( chan,(const char *)buffer);
 	
 	client->getData(buffer2);	
@@ -67,6 +69,8 @@ JNIEXPORT jstring JNICALL Java_org_red5_server_plugin_jni_callback_JNICallback_c
 	jstring pval =(*env).NewStringUTF((const char *)buffer2);
 
 	delete client;
+
+	vm->DetachCurrentThread();
 
 	return pval;
 

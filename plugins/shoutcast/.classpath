@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/*" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="RED5_HOME/red5.jar"/>
+	<classpathentry kind="var" path="RED5_HOME"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/com.springsource.slf4j.api-1.6.1.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/mina-core-2.0.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -24,10 +24,12 @@ public abstract class ComServerLt extends MultiThreadedApplicationAdapter{
 	private IClientProxyAdapterFactory adapterFactory;
 	private IAuthorize tokenReader;
 	private IClientIdentity idGenerator;
+	
 	private boolean allowMultipleIdConnections=false;
 	
 	public ComServerLt(){
 		adapterFactory=new DefaultAdapterFactory();
+		
 		dataFactory=new DefaultNodeFactory();
 	}
 
@@ -62,7 +64,7 @@ public abstract class ComServerLt extends MultiThreadedApplicationAdapter{
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 		
 		IConnectionNode node=new IConnectionNode(client);
@@ -155,8 +157,9 @@ public abstract class ComServerLt extends MultiThreadedApplicationAdapter{
 	protected abstract boolean onAppStart(IScope room);
 	protected abstract boolean onAppConnect(IConnection client, IConnectionNode data);
 	protected abstract boolean onRoomStart(IScope room);
+	protected abstract void onRoomJoin(IScope room,IConnection client);
+	protected abstract void onRoomPart(IScope room,IConnection client);	
 	protected abstract void onRoomStop(IScope room);
 	protected abstract void onAppDisconnect(IConnection client, IConnectionNode data);	
 	protected abstract void onAppStop(IScope room);	
-	
 }

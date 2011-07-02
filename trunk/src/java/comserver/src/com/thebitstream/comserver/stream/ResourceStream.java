@@ -268,7 +268,7 @@ public class ResourceStream implements IResourceStream {
 						
 			((IRTMPEvent) event).setSourceType(Constants.SOURCE_TYPE_LIVE);
 			IoBuffer buf = null;
-			if (rtmpEvent instanceof IStreamData && (buf = ((IStreamData) rtmpEvent).getData()) != null) {
+			if (rtmpEvent instanceof IStreamData && (buf = ((IStreamData<?>) rtmpEvent).getData()) != null) {
 				bytesReceived += buf.limit();
 			}
 			
@@ -311,7 +311,7 @@ public class ResourceStream implements IResourceStream {
 			
 				((IRTMPEvent) event).setSourceType(Constants.SOURCE_TYPE_LIVE);
 			IoBuffer buf = null;
-			if (rtmpEvent instanceof IStreamData && (buf = ((IStreamData) rtmpEvent).getData()) != null) {
+			if (rtmpEvent instanceof IStreamData && (buf = ((IStreamData<?>) rtmpEvent).getData()) != null) {
 				bytesReceived += buf.limit();
 			}
 			

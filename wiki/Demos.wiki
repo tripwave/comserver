@@ -37,3 +37,5 @@ IP cam monitor in it's most basic form. A resource feed connects to some ip cam 
 ===Jacuda Encoder===
 Hardware H264 encoder sample. Requires a webcam, windows 7 and a 'Tesla' or 'Fermi' GPU. The demo consists of a red5 webapp, a publishing client, and a playback client. The publisher will load a camera via jni interface, create the nVidia Hardware encoder, and begin streaming to the application , or any other application you specify.
 While not exactly a comserver application, this demo shares many aspects of the internal core of the comserver. 
+===Light ===
+The 'light' demo show how to use the ApplicationLight class. This is for more traditional red5 programming where you do not have a central flv acting as the main data point for consumers. The benefits of this class are simple spring configuration of identity / authentication modules.

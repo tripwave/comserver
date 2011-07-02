@@ -6,7 +6,7 @@ public class DefaultAuthorizationAdapter implements IAuthorize {
 
 	@Override
 	public boolean appConnect(Object[] params) {
-		return false;
+		return true;
 	}
 
 }

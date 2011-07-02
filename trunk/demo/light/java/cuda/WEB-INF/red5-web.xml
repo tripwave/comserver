@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+	
+	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="location" value="/WEB-INF/red5-web.properties" />
+	</bean>
+	
+	<bean id="web.context" class="org.red5.server.Context" 
+		autowire="byType" />
+	
+	<bean id="web.scope" class="org.red5.server.WebScope"
+		 init-method="register">
+		<property name="server" ref="red5.server" />
+		<property name="parent" ref="global.scope" />
+		<property name="context" ref="web.context" />
+		<property name="handler" ref="web.handler" />
+		<property name="contextPath" value="${webapp.contextPath}" />
+		<property name="virtualHosts" value="${webapp.virtualHosts}" />
+	</bean>
+	
+	<!--  Security bean -->
+	<bean id="tokenReader" class="com.thebitstream.comserver.encoder.DemoLtTokenReader"/>
+	
+	<!--  Id Bean -->
+	<bean id="idGenerator" class="com.thebitstream.comserver.encoder.DemoLtId"/>
+	
+	
+	<!-- Direct reference of ApplicationLight for use without defining app adapter.  
+	<bean id="web.handler" class="com.thebitstream.comserver.app.light.ApplicationLight">
+		<property name="tokenReader" ref="tokenReader"/>
+		<property name="idGenerator" ref="idGenerator"/>
+	</bean>
+			-->
+			
+	<!-- Or using a defined adapter 'Cuda', for overriding familiar adapter handlers. -->
+			
+	<bean id="web.handler" class="com.thebitstream.comserver.encoder.Cuda">
+		<property name="tokenReader" ref="tokenReader"/>
+		<property name="idGenerator" ref="idGenerator"/>
+	</bean>
+
+
+</beans>

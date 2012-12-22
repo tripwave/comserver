@@ -1,16 +1,10 @@
 package comdemo.internal.sharedObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.red5.server.api.IScope;
-import org.red5.server.api.Red5;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.so.ISharedObject;
 import org.red5.server.api.so.ISharedObjectSecurity;
-
-import com.thebitstream.comserver.nodes.IConnectionNode;
-import com.thebitstream.comserver.stream.IResourceSink;
 
 import comdemo.internal.feeds.AVFeed;
 

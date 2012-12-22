@@ -2,7 +2,7 @@ package comdemo.internal.app;
 
 import java.util.Iterator;
 
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 
 import com.thebitstream.comserver.app.ComServer;
 import com.thebitstream.comserver.nodes.IComserverNode;

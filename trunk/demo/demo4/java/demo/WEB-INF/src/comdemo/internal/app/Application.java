@@ -7,9 +7,10 @@ import org.red5.io.amf.Output;
 import org.red5.io.object.Serializer;
 import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.IConnection;
-import org.red5.server.api.IScope;
-import org.red5.server.api.Red5;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.Red5;
+
 import org.red5.server.net.rtmp.event.Notify;
 
 import com.thebitstream.comserver.app.ComServer;

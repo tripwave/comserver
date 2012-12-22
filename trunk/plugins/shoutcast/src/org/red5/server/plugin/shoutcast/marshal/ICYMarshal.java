@@ -10,7 +10,8 @@ import org.red5.io.amf.Output;
 import org.red5.io.object.Serializer;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IContext;
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IBroadcastScope;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.plugin.Shoutcast;
@@ -22,8 +23,8 @@ import org.red5.server.plugin.shoutcast.marshal.transpose.VideoFramer;
 import org.red5.server.plugin.shoutcast.parser.IParse;
 import org.red5.server.plugin.shoutcast.parser.NSVParser;
 import org.red5.server.plugin.shoutcast.stream.ICYStream;
-import org.red5.server.stream.BroadcastScope;
-import org.red5.server.stream.IBroadcastScope;
+
+import org.red5.server.scope.BroadcastScope;
 import org.red5.server.stream.IProviderService;
 import org.slf4j.Logger;
 
@@ -81,7 +82,7 @@ public class ICYMarshal implements IICYMarshal,IICYEventSink {
 		if (providerService.registerBroadcastStream(outputScope, _stream.getPublishedName(), _stream)) {
 			IBroadcastScope bsScope = (BroadcastScope) providerService.getLiveProviderInput(outputScope, _stream
 					.getPublishedName(), true);
-			bsScope.setAttribute(IBroadcastScope.STREAM_ATTRIBUTE, _stream);
+			bsScope.setClientBroadcastStream(_stream);
 		}
 		
 		audioFramer = new AudioFramer(this);
@@ -310,7 +311,7 @@ public class ICYMarshal implements IICYMarshal,IICYEventSink {
 		if (providerService.registerBroadcastStream(_scope, _stream.getPublishedName(), _stream)) {
 			IBroadcastScope bsScope = (BroadcastScope) providerService.getLiveProviderInput(_scope, _stream
 					.getPublishedName(), true);
-			bsScope.setAttribute(IBroadcastScope.STREAM_ATTRIBUTE, _stream);
+			bsScope.setClientBroadcastStream( _stream);
 		}
 		providerService.unregisterBroadcastStream(_scope, _stream.getPublishedName());	
 	}

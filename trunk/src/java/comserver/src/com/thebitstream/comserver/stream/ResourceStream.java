@@ -1,4 +1,19 @@
-/*
+/*******************************************************************************
+ * Copyright 2009-2013 Andy Shaules
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+/**
  * COMSERVER Open Source Application Framework - http://www.thebitstream.com
  *
  * Copyright (c) 2009-2010 by Andy Shaules. All rights reserved.
@@ -22,14 +37,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.event.IEvent;
+import org.red5.server.api.statistics.IClientBroadcastStreamStatistics;
 import org.red5.server.api.statistics.support.StatisticsCounter;
+import org.red5.server.api.stream.IStreamCapableConnection;
 import org.red5.server.api.stream.IStreamCodecInfo;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
@@ -53,7 +71,7 @@ import org.slf4j.Logger;
 
 import com.thebitstream.comserver.stream.util.TimeStampGenrator;
 
-
+// \A[^(\Q/*\E\s+COMSERVER*)]
 
 /**
  * @author Andy Shaules
@@ -392,6 +410,51 @@ public class ResourceStream implements IResourceStream {
 	}
 	public void setLastEventTime(int eventTime) {
 		_lastEventTime = eventTime;
+	}
+	@Override
+	public Map<String, String> getParameters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public IClientBroadcastStreamStatistics getStatistics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setParameters(Map<String, String> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void startPublishing() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String getBroadcastStreamPublishName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int getClientBufferDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public IStreamCapableConnection getConnection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int getStreamId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void setClientBufferDuration(int arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

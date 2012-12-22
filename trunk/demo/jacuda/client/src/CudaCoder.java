@@ -33,7 +33,7 @@ public class CudaCoder implements ICudaListener {
 		streamer.setApp(app);
 		streamer.setHost(host);
 		streamer.setPort(port);
-		streamer.start(publishName, StreamingProxy.LIVE, new Object[]{});
+		streamer.start(publishName, "live", new Object[]{});
 		capture= new Capture();
 		
 		parser.setOutput(publisher);

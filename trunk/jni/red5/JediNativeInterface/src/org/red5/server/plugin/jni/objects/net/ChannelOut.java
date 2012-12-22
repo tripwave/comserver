@@ -21,9 +21,8 @@ package org.red5.server.plugin.jni.objects.net;
 
 import java.io.IOException;
 
-import org.red5.server.net.rtmp.RTMPClient;
+import org.red5.client.net.rtmp.RTMPClient;
 import org.red5.server.net.rtmp.event.IRTMPEvent;
-import org.red5.server.plugin.jni.callback.JNICallback;
 import org.red5.server.stream.message.RTMPMessage;
 
 

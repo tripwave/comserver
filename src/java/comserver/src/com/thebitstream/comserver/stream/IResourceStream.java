@@ -1,4 +1,19 @@
-/*
+/*******************************************************************************
+ * Copyright 2009-2013 Andy Shaules
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+/**
  * COMSERVER Open Source Application Framework - http://www.thebitstream.com
  *
  * Copyright (c) 2009-2010 by Andy Shaules. All rights reserved.
@@ -20,7 +35,7 @@ package com.thebitstream.comserver.stream;
 
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.statistics.IClientBroadcastStreamStatistics;
-import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.stream.IClientBroadcastStream;
 import org.red5.server.messaging.IPipeConnectionListener;
 import org.red5.server.messaging.IProvider;
 import org.red5.server.net.rtmp.event.IRTMPEvent;
@@ -28,7 +43,7 @@ import org.red5.server.net.rtmp.event.IRTMPEvent;
  * @author Andy Shaules
  * @version 1.0
  */
-public interface IResourceStream extends IBroadcastStream, IProvider, IPipeConnectionListener,
+public interface IResourceStream extends IClientBroadcastStream, IProvider, IPipeConnectionListener,
 IClientBroadcastStreamStatistics {
 	
 	/**

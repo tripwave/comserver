@@ -2,7 +2,7 @@ package org.red5.server.plugin;
 
 
 
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.plugin.shoutcast.marshal.ICYMarshal;
 import org.red5.server.plugin.shoutcast.stream.NSVConsumer;
 

@@ -4,17 +4,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.statistics.IClientBroadcastStreamStatistics;
 import org.red5.server.api.statistics.support.StatisticsCounter;
 import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.stream.IClientBroadcastStream;
+import org.red5.server.api.stream.IStreamCapableConnection;
 import org.red5.server.api.stream.IStreamCodecInfo;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
@@ -42,6 +45,7 @@ import org.red5.server.stream.PlayEngine;
 import org.red5.server.stream.codec.StreamCodecInfo;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -49,10 +53,10 @@ import org.slf4j.Logger;
  * @author Andy Shaules (bowljoman@hotmail.com)
  *
  */
-public class ICYStream implements IBroadcastStream, IProvider, IPipeConnectionListener, IICYEventSink,
+public class ICYStream implements IClientBroadcastStream, IProvider, IPipeConnectionListener, IICYEventSink,
 		IClientBroadcastStreamStatistics {
 	
-	private static Logger log = Red5LoggerFactory.getLogger(ICYStream.class, "ICYStream");
+	private static Logger log = LoggerFactory.getLogger(ICYStream.class);
 
 	private Set<IStreamListener> mListeners = new CopyOnWriteArraySet<IStreamListener>();
 
@@ -473,6 +477,51 @@ public class ICYStream implements IBroadcastStream, IProvider, IPipeConnectionLi
 	public void setMetaDataEvent(Notify event) {
 
 		_metaDataEvent = event;
+	}
+	@Override
+	public String getBroadcastStreamPublishName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int getClientBufferDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public IStreamCapableConnection getConnection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int getStreamId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void setClientBufferDuration(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Map<String, String> getParameters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public IClientBroadcastStreamStatistics getStatistics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setParameters(Map<String, String> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void startPublishing() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

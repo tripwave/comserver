@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn" kind="src" path="src/java/comserver/src"/>
+	<classpathentry kind="lib" path="demo/demo5/java/demo/WEB-INF/lib/jinngine.0.8.jar"/>
+	<classpathentry kind="lib" path="jni/red5/JediNativeInterface/JediNativeInterface.jar"/>
+	<classpathentry kind="lib" path="plugins/shoutcast/Shoutcast-1.0.0118.jar"/>
+	<classpathentry kind="lib" path="src/java/comserver/comserver-1.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="RED5_HOME/red5.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/javaee-api-5.1.2.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/mina-core-2.0.5.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-aop-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-asm-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-beans-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-context-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-context-support-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-core-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-expression-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/spring-web-3.1.1.RELEASE.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/jcl-over-slf4j-1.6.4.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/jul-to-slf4j-1.6.4.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/log4j-over-slf4j-1.6.4.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/logback-classic-1.0.3.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/logback-core-1.0.3.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="var" path="RED5_HOME/lib/sysout-over-slf4j-1.0.2.jar"/>
+	<classpathentry kind="var" path="RED5_CLIENT_HOME/red5client.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

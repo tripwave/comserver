@@ -2,7 +2,7 @@ package comdemo.internal.sharedObject;
 
 import java.util.List;
 
-import org.red5.server.api.IScope;
+import org.red5.server.api.scope.IScope;
 import org.red5.server.api.Red5;
 import org.red5.server.api.so.ISharedObject;
 import org.red5.server.api.so.ISharedObjectSecurity;
